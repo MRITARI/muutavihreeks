@@ -14,6 +14,6 @@ Helpoin tapa käyttää sovellusta on ladata valmiiksi käännetty suoritettava 
 2. Suorita ladattu `muutavihreeks.exe`-tiedosto.
 3. Sovellus näyttää yhteyden tilan Exceliin.
 4. Valitse haluamasi väri listalta nuolinäppäimillä.
-5. Kursori on aktiivisena syötekentässä. Aloita koodien skannaus (tai kirjoittaminen) ja paina `Enter` jokaisen koodin jälkeen.
+5. Kursori on aktiivisena syötekentässä. Aloita koodien skannaus (tai kirjoittaminen).
 
 ![kuva](/kuva.png)
