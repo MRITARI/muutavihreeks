@@ -16,4 +16,4 @@ Helpoin tapa käyttää sovellusta on ladata valmiiksi käännetty suoritettava 
 4. Valitse haluamasi väri listalta nuolinäppäimillä.
 5. Kursori on aktiivisena syötekentässä. Aloita koodien skannaus (tai kirjoittaminen) ja paina `Enter` jokaisen koodin jälkeen.
 
-![kuva]/kuva.png
+![kuva](/kuva.png)
