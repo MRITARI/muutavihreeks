@@ -2,7 +2,7 @@
 
 - **Terminal User Interface:** A clean, keyboard-navigable interface that runs directly in your Windows terminal.
 - **Live Excel Integration:** Automatically connects to the currently active Excel workbook.
-- **Fast Code Lookup:** Scans column 'C' for a matching code and updates the entire row.
+- **Fast Code Lookup:** Scans all columns for a matching code and updates the entire row.
 - **Color Selection:** Choose from a predefined palette of colors to apply.
 - **Real-time Logging:** View a live log of all operations, including successful changes, skipped items (already the correct color), and codes not found.
 
