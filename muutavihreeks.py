@@ -27,7 +27,7 @@ class SplashScreen(Screen):
         color: #888888;
     }
     """
-    
+
     def compose(self) -> ComposeResult:
         with Middle():
             with Center(id="title-box"):
@@ -37,7 +37,7 @@ class SplashScreen(Screen):
     def on_mount(self) -> None:
                        #
         self.set_timer(2, self.siirry_paanakymaan)
-    
+
     def siirry_paanakymaan(self) -> None:
         self.app.switch_screen(PaaNakyma())
 
@@ -172,26 +172,40 @@ class PaaNakyma(Screen):
 
         try:
             loytyi = False
-            c_sarakkeen_arvot = self.sheet.range('C1:C10000').value
+            used = self.sheet.used_range
+            arvot = used.value
+            alku_rivi = used.row
 
-            for indeksi, solun_arvo in enumerate(c_sarakkeen_arvot):
-                if solun_arvo is not None and str(solun_arvo).strip().upper() == luettu_koodi:
-                    rivi_nro = indeksi + 1
-                    kohde_alue = self.sheet.range(f'{rivi_nro}:{rivi_nro}')
-                    
-                    nykyinen_vari_rgb = kohde_alue.color
-                    nykyinen_vari_nimi = self.hae_varin_nimi(nykyinen_vari_rgb)
-
-                    if nykyinen_vari_rgb == self.aktiivinen_vari:
-                        self.loki_viesti(f"[bold yellow]OHITETTU:[/bold yellow] {turvallinen_koodi} (Rivi {rivi_nro}) | Oli jo {nykyinen_vari_nimi}")
-                        self.status_label.update(f"Viimeisin: {turvallinen_koodi}\n[bold yellow]Ohitettu (jo {self.aktiivinen_vari_nimi})[/bold yellow]")
+            if arvot is not None:
+                if not isinstance(arvot, list):
+                    arvot = [[arvot]]
+                elif isinstance(arvot, list) and arvot and not isinstance(arvot[0], list):
+                    if used.columns.count == 1:
+                        arvot = [[val] for val in arvot]
                     else:
-                        kohde_alue.color = self.aktiivinen_vari
-                        self.loki_viesti(f"[bold green]MUUTETTU:[/bold green] {turvallinen_koodi} (Rivi {rivi_nro}) | {nykyinen_vari_nimi} -> {self.aktiivinen_vari_nimi}")
-                        self.status_label.update(f"Viimeisin: {turvallinen_koodi}\n[bold green]Muutettu: {self.aktiivinen_vari_nimi}[/bold green]")
-                    
-                    loytyi = True
-                    break
+                        arvot = [arvot]
+
+                for r_idx, rivi in enumerate(arvot):
+                    for solun_arvo in rivi:
+                        if solun_arvo is not None and str(solun_arvo).strip().upper() == luettu_koodi:
+                            rivi_nro = alku_rivi + r_idx
+                            kohde_alue = self.sheet.range(f'{rivi_nro}:{rivi_nro}')
+
+                            nykyinen_vari_rgb = kohde_alue.color
+                            nykyinen_vari_nimi = self.hae_varin_nimi(nykyinen_vari_rgb)
+
+                            if nykyinen_vari_rgb == self.aktiivinen_vari:
+                                self.loki_viesti(f"[bold yellow]OHITETTU:[/bold yellow] {turvallinen_koodi} (Rivi {rivi_nro}) | Oli jo {nykyinen_vari_nimi}")
+                                self.status_label.update(f"Viimeisin: {turvallinen_koodi}\n[bold yellow]Ohitettu (jo {self.aktiivinen_vari_nimi})[/bold yellow]")
+                            else:
+                                kohde_alue.color = self.aktiivinen_vari
+                                self.loki_viesti(f"[bold green]MUUTETTU:[/bold green] {turvallinen_koodi} (Rivi {rivi_nro}) | {nykyinen_vari_nimi} -> {self.aktiivinen_vari_nimi}")
+                                self.status_label.update(f"Viimeisin: {turvallinen_koodi}\n[bold green]Muutettu: {self.aktiivinen_vari_nimi}[/bold green]")
+
+                            loytyi = True
+                            break
+                    if loytyi:
+                        break
 
             if not loytyi:
                 self.loki_viesti(f"[bold red]EI LÖYTYNYT:[/bold red] {turvallinen_koodi}")
